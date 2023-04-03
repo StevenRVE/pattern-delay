@@ -1,18 +1,18 @@
 cmake_minimum_required(VERSION 3.7)
- project(sve-template-plugin)
+ project(sve-pattern-delay)
 
  add_subdirectory(dpf)
 
- dpf_add_plugin(sve-template-plugin
+ dpf_add_plugin(sve-pattern-delay
    TARGETS clap lv2 vst2 vst3
 
    FILES_DSP
-       source/template-plugin.cpp
+       source/sve-pattern-delay.cpp
  )
 
- target_include_directories(sve-template-plugin
+ target_include_directories(sve-pattern-delay
    PUBLIC source)
 
- target_compile_options(sve-template-plugin PUBLIC "-Wno-c++11-narrowing")
+ target_compile_options(sve-pattern-delay PUBLIC "-Wno-c++11-narrowing")
 
  add_compile_options(-fdiagnostics-color=always)

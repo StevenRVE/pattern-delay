@@ -18,8 +18,8 @@
 #define DISTRHO_PLUGIN_INFO_H_INCLUDED
 
 #define DISTRHO_PLUGIN_BRAND "SvE-plugins"
-#define DISTRHO_PLUGIN_NAME "sve-template-plugin"
-#define DISTRHO_PLUGIN_URI  "https://github.com/StevenRVE/sve-plugins/sve-template-plugin"
+#define DISTRHO_PLUGIN_NAME "sve-pattern-delay"
+#define DISTRHO_PLUGIN_URI  "https://github.com/StevenRVE/sve-pattern-delay"
 
 #define DISTRHO_PLUGIN_IS_RT_SAFE       1
 #define DISTRHO_PLUGIN_NUM_INPUTS       1

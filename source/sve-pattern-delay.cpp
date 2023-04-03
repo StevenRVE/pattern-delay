@@ -1,4 +1,4 @@
-#include "template-plugin.hpp"
+#include "sve-pattern-delay.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -6,9 +6,10 @@ START_NAMESPACE_DISTRHO
       Plugin class constructor.
       You must set all parameter values to their defaults, matching the value in initParameter().
     */
-TemplatePlugin::TemplatePlugin()
+PatternDelay::PatternDelay()
     : Plugin(PARAM_COUNT, 0, 0) // parameters, programs, states
 {
+    gain = 1.0f;
     /**
       Initialize all our parameters to their defaults.
       In this example all parameters have 0 as default, so we can simply zero them.
@@ -24,7 +25,7 @@ TemplatePlugin::TemplatePlugin()
   Initialize the parameter @a index.
   This function will be called once, shortly after the plugin is created.
 */
-void TemplatePlugin::initParameter(uint32_t index, Parameter& parameter)
+void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
 {
     if (index >= PARAM_COUNT) { return; }
 
@@ -65,7 +66,7 @@ void TemplatePlugin::initParameter(uint32_t index, Parameter& parameter)
   Get the current value of a parameter.
   The host may call this function from any context, including realtime processing.
 */
-float TemplatePlugin::getParameterValue(uint32_t index) const
+float PatternDelay::getParameterValue(uint32_t index) const
 {
     switch (index)
     {
@@ -83,7 +84,7 @@ float TemplatePlugin::getParameterValue(uint32_t index) const
   When a parameter is marked as automable, you must ensure no non-realtime
   operations are performed.
 */
-void TemplatePlugin::setParameterValue(uint32_t index, float value)
+void PatternDelay::setParameterValue(uint32_t index, float value)
 {
     switch (index)
     {
@@ -103,12 +104,12 @@ void TemplatePlugin::setParameterValue(uint32_t index, float value)
 // -------------------------------------------------------------------
 // Process
 
-void TemplatePlugin::activate()
+void PatternDelay::activate()
 {
     // plugin is activated
 }
 
-void TemplatePlugin::deactivate()
+void PatternDelay::deactivate()
 {
     // plugin is deactivated
 }
@@ -116,7 +117,7 @@ void TemplatePlugin::deactivate()
 /**
   Run/process function for plugins with MIDI input.
 */
-void TemplatePlugin::run(const float**, float**, uint32_t nframes)
+void PatternDelay::run(const float**, float**, uint32_t nframes)
 {
     // run
 }
@@ -128,7 +129,7 @@ void TemplatePlugin::run(const float**, float**, uint32_t nframes)
     Optional callback to inform the plugin about a sample rate change.
     This function will only be called when the plugin is deactivated.
 */
-void TemplatePlugin::sampleRateChanged(double newSampleRate)
+void PatternDelay::sampleRateChanged(double newSampleRate)
 {
     (void)newSampleRate;
 }
@@ -137,7 +138,7 @@ void TemplatePlugin::sampleRateChanged(double newSampleRate)
 
 Plugin* createPlugin()
 {
-    return new TemplatePlugin();
+    return new PatternDelay();
 }
 
 // -----------------------------------------------------------------------

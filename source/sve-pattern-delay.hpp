@@ -18,7 +18,7 @@ START_NAMESPACE_DISTRHO
 /**
   Your plugin class that subclases the base DPF Plugin one.
 */
-class TemplatePlugin : public Plugin
+class PatternDelay : public Plugin
 {
 public:
     enum Parameters {
@@ -30,7 +30,7 @@ public:
       Plugin class constructor.
       You must set all parameter values to their defaults, matching the value in initParameter().
     */
-    TemplatePlugin();
+    PatternDelay();
 
 protected:
     // -------------------------------------------------------------------
@@ -129,7 +129,7 @@ private:
     /**
         Set our plugin class as non-copyable and add a leak detector just in case.
     */
-    DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TemplatePlugin)
+    DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PatternDelay)
     float gain;
 };
 

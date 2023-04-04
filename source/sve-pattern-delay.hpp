@@ -3,6 +3,7 @@
 
 // framework
 #include "DistrhoPlugin.hpp"
+#include "circularBuffer.hpp"
 
 // classes
 
@@ -106,9 +107,9 @@ protected:
     // -------------------------------------------------------------------
     // Process
 
-    void activate();
+    void activate() override;
 
-    void deactivate();
+    void deactivate() override;
 
     /**
       Run/process function for plugins with MIDI input.
@@ -126,12 +127,15 @@ protected:
 
 private:
     // objects
+    CircularBuffer circularBuffer{bufferSize};
 
-    /**
-        Set our plugin class as non-copyable and add a leak detector just in case.
-    */
-    DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PatternDelay)
+    // variables
     float gain;
+    float bufferSizeInSeconds;
+    uint32_t bufferSize;
+
+
+    DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PatternDelay)
 };
 
 END_NAMESPACE_DISTRHO

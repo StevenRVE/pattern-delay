@@ -10,6 +10,9 @@ PatternDelay::PatternDelay()
     : Plugin(PARAM_COUNT, 0, 0) // parameters, programs, states
 {
     gain = 1.0f;
+    bufferSizeInSeconds = 2.0;
+    // add round method
+    bufferSize = 48000 * bufferSizeInSeconds;
     /**
       Initialize all our parameters to their defaults.
       In this example all parameters have 0 as default, so we can simply zero them.
@@ -122,11 +125,11 @@ void PatternDelay::run(const float** inputs, float** outputs, uint32_t nframes)
     const float* const input  = inputs[0];
     /* */ float* const output = outputs[0];
 
-    const float gainCoef = DB_CO(gain);
+    const float gainCoefficient = DB_CO(gain);
 
     for (uint32_t i=0; i<nframes; ++i)
     {
-        output[i] = input[i] * gainCoef;
+        output[i] = input[i] * gainCoefficient;
     }
 }
 

@@ -10,7 +10,7 @@
 class CircularBuffer {
 public:
     // constructor and destructor
-    CircularBuffer(uint32_t size);
+    explicit CircularBuffer(uint32_t size);
 
     ~CircularBuffer();
 

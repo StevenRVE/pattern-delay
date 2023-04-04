@@ -1,4 +1,4 @@
-# sve-template-plugin
+# SvE-Pattern-Delay
 This repository contains a template plugin for building plugins using the DPF framework.
 
 Clone git repository

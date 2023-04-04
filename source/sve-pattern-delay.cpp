@@ -117,9 +117,17 @@ void PatternDelay::deactivate()
 /**
   Run/process function for plugins with MIDI input.
 */
-void PatternDelay::run(const float**, float**, uint32_t nframes)
+void PatternDelay::run(const float** inputs, float** outputs, uint32_t nframes)
 {
-    // run
+    const float* const input  = inputs[0];
+    /* */ float* const output = outputs[0];
+
+    const float gainCoef = DB_CO(gain);
+
+    for (uint32_t i=0; i<nframes; ++i)
+    {
+        output[i] = input[i] * gainCoef;
+    }
 }
 
 // -------------------------------------------------------------------

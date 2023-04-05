@@ -2,17 +2,19 @@
 // Created by steve on 4-4-2023.
 //
 
-#ifndef SVE_PATTERN_DELAY_CIRCULARBUFFER_HPP
-#define SVE_PATTERN_DELAY_CIRCULARBUFFER_HPP
+#ifndef SVE_PATTERN_DELAY_DELAYLINE_HPP
+#define SVE_PATTERN_DELAY_DELAYLINE_HPP
 
 #include <cstdint>
 
-class CircularBuffer {
+class DelayLine {
 public:
     // constructor and destructor
-    explicit CircularBuffer(uint32_t size);
+    DelayLine() = default;
 
-    ~CircularBuffer();
+    DelayLine(uint32_t size);
+
+    ~DelayLine();
 
     // methods
     void allocateBuffer();
@@ -42,11 +44,11 @@ private:
     // variables
     float* buffer = nullptr;
     uint32_t bufferSize;
-    uint32_t readHead;
-    uint32_t writeHead;
-    uint32_t distanceReadWriteHead;
+    uint32_t readHead = 0;
+    uint32_t writeHead = 0;
+    uint32_t distanceReadWriteHead = 0;
 
 };
 
 
-#endif //SVE_PATTERN_DELAY_CIRCULARBUFFER_HPP
+#endif //SVE_PATTERN_DELAY_DELAYLINE_HPP

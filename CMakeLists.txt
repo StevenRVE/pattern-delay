@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.7)
 
    FILES_DSP
        source/sve-pattern-delay.cpp
-       source/circularBuffer.cpp
+         source/objects/delayLine.cpp
  )
 
  target_include_directories(sve-pattern-delay

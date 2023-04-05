@@ -2,53 +2,53 @@
 // Created by steve on 4-4-2023.
 //
 
-#include "circularBuffer.hpp"
+#include "delayLine.hpp"
 #include <iostream>
 #include <cstring>
 
-CircularBuffer::CircularBuffer(uint32_t size) :
+DelayLine::DelayLine(uint32_t size) :
 bufferSize(size)
 {
     allocateBuffer();
 }
 
-CircularBuffer::~CircularBuffer()
+DelayLine::~DelayLine()
 {
     releaseBuffer();
 }
 
 // methods
-void CircularBuffer::allocateBuffer()
+void DelayLine::allocateBuffer()
 {
     buffer = (float*)malloc(bufferSize * sizeof(float));
     memset(buffer, 0, bufferSize * sizeof(float));
 }
 
-void CircularBuffer::releaseBuffer()
+void DelayLine::releaseBuffer()
 {
     free(buffer);
 }
 
-void CircularBuffer::setBufferSize(unsigned int size)
+void DelayLine::setBufferSize(unsigned int size)
 {
     bufferSize = size;
     releaseBuffer();
     allocateBuffer();
 }
 
-void CircularBuffer::increaseReadHead()
+void DelayLine::increaseReadHead()
 {
     readHead++;
     wrapHead(readHead);
 }
 
-void CircularBuffer::increaseWriteHead()
+void DelayLine::increaseWriteHead()
 {
     writeHead++;
     wrapHead(writeHead);
 }
 
-void CircularBuffer::wrapHead(unsigned int& head) const
+void DelayLine::wrapHead(unsigned int& head) const
 {
     if (head >= bufferSize)
     {
@@ -56,30 +56,30 @@ void CircularBuffer::wrapHead(unsigned int& head) const
     }
 }
 
-void CircularBuffer::tick()
+void DelayLine::tick()
 {
     increaseWriteHead();
     increaseReadHead();
 }
 
-void CircularBuffer::write(float value)
+void DelayLine::write(float value)
 {
     buffer[writeHead] = value;
 }
 
-float CircularBuffer::read()
+float DelayLine::read()
 {
     return buffer[readHead];
 }
 
-void CircularBuffer::setDistanceReadWriteHead(unsigned int distance)
+void DelayLine::setDistanceReadWriteHead(unsigned int distance)
 {
     distanceReadWriteHead = distance;
     readHead = writeHead - distanceReadWriteHead + bufferSize;
     wrapHead(readHead);
 }
 
-uint32_t CircularBuffer::getDistanceReadWriteHead() const
+uint32_t DelayLine::getDistanceReadWriteHead() const
 {
     return distanceReadWriteHead;
 }

@@ -15,7 +15,7 @@ public:
     // constructor and destructor
     DelayLine() = default;
 
-    DelayLine(uint32_t size);
+    DelayLine(float sampleRate, uint32_t size);
 
     ~DelayLine();
 
@@ -45,6 +45,7 @@ public:
 
 private:
     // variables
+    float sampleRate = 44100;
     float* buffer = nullptr;
     uint32_t bufferSize;
     uint32_t readHead = 0;

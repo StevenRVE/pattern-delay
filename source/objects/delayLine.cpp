@@ -6,9 +6,11 @@
 
 
 
-DelayLine::DelayLine(uint32_t size) :
-bufferSize(size)
+DelayLine::DelayLine(float sampleRate, uint32_t size) :
+sampleRate(sampleRate),
+bufferSize(sampleRate * size)
 {
+
     std::cout << "DelayLine constructor" << std::endl;
 
     allocateBuffer();
@@ -76,9 +78,15 @@ float DelayLine::read()
     return buffer[readHead];
 }
 
-void DelayLine::setDistanceReadWriteHead(unsigned int distance)
+void DelayLine::setDistanceReadWriteHead(uint32_t distance)
 {
-    distanceReadWriteHead = distance;
+    if (distance >= bufferSize)
+    {
+        distance - bufferSize -1 ;
+    }
+
+    distanceReadWriteHead = distance * (sampleRate / 1000);
+    std::cout << "distanceReadWriteHead: " << distanceReadWriteHead << std::endl;
     readHead = writeHead - distanceReadWriteHead + bufferSize;
     wrapHead(readHead);
 }

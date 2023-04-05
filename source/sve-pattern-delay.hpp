@@ -25,6 +25,8 @@ class PatternDelay : public Plugin
 public:
     enum Parameters {
         PARAM_GAIN,
+        PARAM_FEEDBACK,
+        PARAM_DELAYTIME,
         PARAM_COUNT
     };
 
@@ -126,14 +128,12 @@ protected:
     void sampleRateChanged(double newSampleRate) override;
 
 private:
-    // objects
-    CircularBuffer circularBuffer{bufferSize};
+    DelayLine delayLine;
 
     // variables
     float gain;
-    float bufferSizeInSeconds;
-    uint32_t bufferSize;
-
+    float feedback;
+    uint32_t delayTime;
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PatternDelay)
 };

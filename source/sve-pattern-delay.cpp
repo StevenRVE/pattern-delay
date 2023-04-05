@@ -7,7 +7,11 @@ START_NAMESPACE_DISTRHO
       You must set all parameter values to their defaults, matching the value in initParameter().
     */
 PatternDelay::PatternDelay()
-    : Plugin(PARAM_COUNT, 0, 0) // parameters, programs, states
+: Plugin(PARAM_COUNT, 0, 0),
+  gain(0.0f),
+  feedback(0.5f),
+  delayTime(500),
+  delayLine(getSampleRate(), 2)
 {
     gain = 1.0f;
     bufferSizeInSeconds = 2.0;
@@ -34,6 +38,7 @@ void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
 
     struct ParamProps
     {
+        bool automatable, boolean, integer, logarithmic, output, trigger;
         float min, max, def;
         const char* name;
         const char* symbol;
@@ -42,7 +47,12 @@ void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
 
     const auto setParamProps = [](auto& param, ParamProps props)
     {
-        param.hints = kParameterIsAutomatable | kParameterIsInteger;
+        if(props.automatable){ param.hints = kParameterIsAutomatable;}
+        if(props.boolean){param.hints = kParameterIsBoolean;}
+        if(props.integer){param.hints = kParameterIsInteger;}
+        if(props.logarithmic){param.hints = kParameterIsLogarithmic;}
+        if(props.output){param.hints = kParameterIsOutput;}
+        if(props.trigger){param.hints = kParameterIsTrigger | kParameterIsBoolean;}
         param.ranges.min = props.min;
         param.ranges.max = props.max;
         param.ranges.def = props.def;
@@ -54,7 +64,14 @@ void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
     {
         // MASTER PARAMS
         case PARAM_GAIN:
-            setParamProps(parameter, { .min=-0.0f, .max=2.0f, .def=1.0f, .name="Gain", .symbol="gain" });
+            setParamProps(parameter, { .automatable=true, .min=-90.0f, .max=24.0f, .def=0.0f, .name="Gain", .symbol="gain"});
+            break;
+        case PARAM_FEEDBACK:
+            setParamProps(parameter, { .automatable=true, .min=0.0f, .max=0.9f, .def=0.5f, .name="Feedback", .symbol="feedback"});
+            break;
+        case PARAM_DELAYTIME:
+            setParamProps(parameter, { .automatable=true, .integer=true, .min=100, .max=2000, .def=500, .name="Delay Time", .symbol="delayTime"});
+            delayLine.setDistanceReadWriteHead(delayTime);
             break;
         default:
             break;
@@ -73,9 +90,13 @@ float PatternDelay::getParameterValue(uint32_t index) const
 {
     switch (index)
     {
-        // MASTER PARAMS
+        // PARAMS
         case PARAM_GAIN:
             return gain;
+        case PARAM_FEEDBACK:
+            return feedback;
+        case PARAM_DELAYTIME:
+            return delayTime;
         default:
             return 0;
     }
@@ -94,6 +115,13 @@ void PatternDelay::setParameterValue(uint32_t index, float value)
     // MASTER PARAMS
     case PARAM_GAIN:
         gain = value;
+        break;
+    case PARAM_FEEDBACK:
+        feedback = value;
+        break;
+    case PARAM_DELAYTIME:
+        delayTime = value;
+        delayLine.setDistanceReadWriteHead(delayTime);
         break;
     default:
         break;
@@ -127,9 +155,13 @@ void PatternDelay::run(const float** inputs, float** outputs, uint32_t nframes)
 
     const float gainCoefficient = DB_CO(gain);
 
-    for (uint32_t i=0; i<nframes; ++i)
+    for (uint32_t currentFrame=0; currentFrame < nframes; ++currentFrame)
     {
-        output[i] = input[i] * gainCoefficient;
+        delayLine.write(input[currentFrame] + delayLine.read() * feedback);
+
+        output[currentFrame] = input[currentFrame] + delayLine.read();
+
+        delayLine.tick();
     }
 }
 

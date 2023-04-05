@@ -13,10 +13,6 @@ PatternDelay::PatternDelay()
   delayTime(500),
   delayLine(getSampleRate(), 2)
 {
-    gain = 1.0f;
-    bufferSizeInSeconds = 2.0;
-    // add round method
-    bufferSize = 48000 * bufferSizeInSeconds;
     /**
       Initialize all our parameters to their defaults.
       In this example all parameters have 0 as default, so we can simply zero them.
@@ -42,7 +38,6 @@ void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
         float min, max, def;
         const char* name;
         const char* symbol;
-
     };
 
     const auto setParamProps = [](auto& param, ParamProps props)

@@ -3,7 +3,7 @@
 
 // framework
 #include "DistrhoPlugin.hpp"
-#include "circularBuffer.hpp"
+#include "objects/delayLine.hpp"
 
 // classes
 
@@ -44,13 +44,13 @@ protected:
       Get the plugin label.
       This label is a short restricted name consisting of only _, a-z, A-Z and 0-9 characters.
     */
-    const char* getLabel() const noexcept override { return "Template Plugin"; }
+    const char* getLabel() const noexcept override { return "SvE Pattern Delay"; }
 
     /**
       Get an extensive comment/description about the plugin.
       Optional, returns nothing by default.
     */
-    const char* getDescription() const override { return "SvE template plugin."; }
+    const char* getDescription() const override { return "SvE Pattern Delay."; }
 
     /**
       Get the plugin author/maker.
@@ -74,7 +74,7 @@ protected:
       This value is used by LADSPA, DSSI and VST plugin formats.
       @see d_cconst()
     */
-    int64_t getUniqueId() const noexcept override { return d_cconst('S', 'v', 'E', 'T'); }
+    int64_t getUniqueId() const noexcept override { return d_cconst('S', 'v', 'E', 'D'); }
 
     // -------------------------------------------------------------------
     // Init

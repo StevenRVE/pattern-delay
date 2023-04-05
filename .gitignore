@@ -34,3 +34,6 @@
 # IDEA files
 cmake-build-debug
 .idea
+
+# Carla project
+/carla-test-project.carxp

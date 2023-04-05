@@ -3,17 +3,21 @@
 //
 
 #include "delayLine.hpp"
-#include <iostream>
-#include <cstring>
+
+
 
 DelayLine::DelayLine(uint32_t size) :
 bufferSize(size)
 {
+    std::cout << "DelayLine constructor" << std::endl;
+
     allocateBuffer();
 }
 
 DelayLine::~DelayLine()
 {
+    std::cout << "DelayLine destructor" << std::endl;
+
     releaseBuffer();
 }
 

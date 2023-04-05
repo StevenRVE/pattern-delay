@@ -5,7 +5,10 @@
 #ifndef SVE_PATTERN_DELAY_DELAYLINE_HPP
 #define SVE_PATTERN_DELAY_DELAYLINE_HPP
 
+#include <algorithm>
+#include <iostream>
 #include <cstdint>
+#include <cstring>
 
 class DelayLine {
 public:

@@ -26,14 +26,19 @@ DelayLine::~DelayLine()
 // methods
 void DelayLine::allocateBuffer()
 {
-    buffer = (float*)malloc(bufferSize * sizeof(float));
-    memset(buffer, 0, bufferSize * sizeof(float));
+    std::cout << "Allocating buffer..." << std::endl;
+    buffer = new float[bufferSize]();
+    std::fill_n(buffer, bufferSize, 0.0f);
+    std::cout << "Done." << std::endl;
 }
 
 void DelayLine::releaseBuffer()
 {
-    free(buffer);
+    std::cout << "Releasing buffer..." << std::endl;
+    delete[] buffer;
+    std::cout << "Done." << std::endl;
 }
+
 
 void DelayLine::setBufferSize(unsigned int size)
 {

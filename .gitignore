@@ -37,3 +37,6 @@ cmake-build-debug
 
 # Carla project
 /carla-test-project.carxp
+
+# MaxMSP patches
+/maxpat-prototypes/

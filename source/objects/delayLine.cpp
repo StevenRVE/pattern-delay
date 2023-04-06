@@ -6,20 +6,17 @@
 
 
 
-DelayLine::DelayLine(float sampleRate, uint32_t size) :
+DelayLine::DelayLine(double sampleRate, uint32_t size) :
 sampleRate(sampleRate),
 bufferSize(sampleRate * size)
 {
-
     std::cout << "DelayLine constructor" << std::endl;
-
     allocateBuffer();
 }
 
 DelayLine::~DelayLine()
 {
     std::cout << "DelayLine destructor" << std::endl;
-
     releaseBuffer();
 }
 
@@ -100,4 +97,3 @@ uint32_t DelayLine::getDistanceReadWriteHead() const
 {
     return distanceReadWriteHead;
 }
-

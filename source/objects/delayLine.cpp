@@ -87,7 +87,7 @@ void DelayLine::setDistanceReadWriteHead(uint32_t distance)
 {
     if (distance >= bufferSize)
     {
-        distance - bufferSize -1 ;
+        distance = bufferSize - 1;
     }
 
     distanceReadWriteHead = distance * (sampleRate / 1000);

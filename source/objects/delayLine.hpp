@@ -13,7 +13,6 @@
 class DelayLine {
 public:
     // constructor and destructor
-    DelayLine() = default;
 
     DelayLine(double sampleRate, uint32_t size);
 

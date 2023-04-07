@@ -27,6 +27,8 @@ public:
         PARAM_GAIN,
         PARAM_FEEDBACK_CLEAN,
         PARAM_DELAYTIME_CLEAN,
+        PARAM_FEEDBACK_FX,
+        PARAM_DELAYTIME_FX,
         PARAM_COUNT
     };
 
@@ -133,8 +135,8 @@ private:
 
     // variables
     float gain;
-    float feedbackClean;
-    uint32_t delayTimeClean;
+    float feedbackClean, feedbackFX;
+    uint32_t delayTimeClean, delayTimeFX;
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PatternDelay)
 };

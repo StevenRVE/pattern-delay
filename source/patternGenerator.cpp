@@ -10,10 +10,7 @@ PatternGenerator::PatternGenerator() :
 
 }
 
-PatternGenerator::~PatternGenerator()
-{
-
-}
+PatternGenerator::~PatternGenerator() = default;
 
 void PatternGenerator::generatePattern()
 {

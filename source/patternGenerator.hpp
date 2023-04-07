@@ -11,9 +11,9 @@
 class PatternGenerator {
 public:
     enum PatternType{
-        PATTERN_TYPE_NTH,
-        PATTERN_TYPE_EUCLIDEAN,
         PATTERN_TYPE_RANDOM,
+        PATTERN_TYPE_EUCLIDEAN,
+        PATTERN_TYPE_NTH,
         PATTERN_TYPE_COUNT
     };
 
@@ -26,7 +26,7 @@ public:
     uint8_t getPatternNumber() const;
 
 private:
-    PatternType patternType;
+    PatternType patternType = PATTERN_TYPE_RANDOM;
     uint8_t patternNumber;
 
     std::array<bool,8> pattern { 0 };

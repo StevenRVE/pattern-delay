@@ -11,7 +11,8 @@ PatternDelay::PatternDelay()
   gain(0.0f),
   feedback(0.5f),
   delayTime(500),
-  delayLine(getSampleRate(), 2)
+  delayLineClean(getSampleRate(), 2),
+  delayLineFX(getSampleRate(), 2)
 {
     /**
       Initialize all our parameters to their defaults.
@@ -66,7 +67,8 @@ void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
             break;
         case PARAM_DELAYTIME:
             setParamProps(parameter, { .automatable=true, .integer=true, .min=100, .max=2000, .def=500, .name="Delay Time", .symbol="delayTime"});
-            delayLine.setDistanceReadWriteHead(delayTime);
+            delayLineClean.setDistanceReadWriteHead(delayTime);
+            delayLineFX.setDistanceReadWriteHead(delayTime);
             break;
         default:
             break;
@@ -116,7 +118,8 @@ void PatternDelay::setParameterValue(uint32_t index, float value)
         break;
     case PARAM_DELAYTIME:
         delayTime = value;
-        delayLine.setDistanceReadWriteHead(delayTime);
+        delayLineClean.setDistanceReadWriteHead(delayTime);
+        delayLineFX.setDistanceReadWriteHead(delayTime);
         break;
     default:
         break;
@@ -152,11 +155,13 @@ void PatternDelay::run(const float** inputs, float** outputs, uint32_t nframes)
 
     for (uint32_t currentFrame=0; currentFrame < nframes; ++currentFrame)
     {
-        delayLine.write(input[currentFrame] + delayLine.read() * feedback);
+        delayLineClean.write(input[currentFrame] + delayLineClean.read() * feedback);
+        delayLineFX.write(input[currentFrame] + delayLineFX.read() * feedback);
 
-        output[currentFrame] = input[currentFrame] + delayLine.read();
+        output[currentFrame] = input[currentFrame] + delayLineClean.read() + delayLineFX.read();
 
-        delayLine.tick();
+        delayLineClean.tick();
+        delayLineFX.tick();
     }
 }
 

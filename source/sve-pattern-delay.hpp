@@ -128,7 +128,8 @@ protected:
     void sampleRateChanged(double newSampleRate) override;
 
 private:
-    DelayLine delayLine;
+    DelayLine delayLineClean;
+    DelayLine delayLineFX;
 
     // variables
     float gain;

@@ -9,8 +9,8 @@ START_NAMESPACE_DISTRHO
 PatternDelay::PatternDelay()
 : Plugin(PARAM_COUNT, 0, 0),
   gain(0.0f),
-  feedback(0.5f),
-  delayTime(500),
+  feedbackClean(0.5f),
+  delayTimeClean(500),
   delayLineClean(getSampleRate(), 2),
   delayLineFX(getSampleRate(), 2)
 {
@@ -62,13 +62,13 @@ void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
         case PARAM_GAIN:
             setParamProps(parameter, { .automatable=true, .min=-90.0f, .max=24.0f, .def=0.0f, .name="Gain", .symbol="gain"});
             break;
-        case PARAM_FEEDBACK:
-            setParamProps(parameter, { .automatable=true, .min=0.0f, .max=0.9f, .def=0.5f, .name="Feedback", .symbol="feedback"});
+        case PARAM_FEEDBACK_CLEAN:
+            setParamProps(parameter, { .automatable=true, .min=0.0f, .max=0.9f, .def=0.5f, .name="Feedback", .symbol="feedbackClean"});
             break;
-        case PARAM_DELAYTIME:
-            setParamProps(parameter, { .automatable=true, .integer=true, .min=100, .max=2000, .def=500, .name="Delay Time", .symbol="delayTime"});
-            delayLineClean.setDistanceReadWriteHead(delayTime);
-            delayLineFX.setDistanceReadWriteHead(delayTime);
+        case PARAM_DELAYTIME_CLEAN:
+            setParamProps(parameter, { .automatable=true, .integer=true, .min=100, .max=2000, .def=500, .name="Delay Time", .symbol="delayTimeClean"});
+            delayLineClean.setDistanceReadWriteHead(delayTimeClean);
+            delayLineFX.setDistanceReadWriteHead(delayTimeClean);
             break;
         default:
             break;
@@ -91,9 +91,9 @@ float PatternDelay::getParameterValue(uint32_t index) const
         case PARAM_GAIN:
             return gain;
         case PARAM_FEEDBACK:
-            return feedback;
+            return feedbackClean;
         case PARAM_DELAYTIME:
-            return delayTime;
+            return delayTimeClean;
         default:
             return 0;
     }
@@ -113,13 +113,13 @@ void PatternDelay::setParameterValue(uint32_t index, float value)
     case PARAM_GAIN:
         gain = value;
         break;
-    case PARAM_FEEDBACK:
-        feedback = value;
+    case PARAM_FEEDBACK_CLEAN:
+        feedbackClean = value;
         break;
-    case PARAM_DELAYTIME:
-        delayTime = value;
-        delayLineClean.setDistanceReadWriteHead(delayTime);
-        delayLineFX.setDistanceReadWriteHead(delayTime);
+    case PARAM_DELAYTIME_CLEAN:
+        delayTimeClean = value;
+        delayLineClean.setDistanceReadWriteHead(delayTimeClean);
+        delayLineFX.setDistanceReadWriteHead(delayTimeClean);
         break;
     default:
         break;
@@ -155,8 +155,8 @@ void PatternDelay::run(const float** inputs, float** outputs, uint32_t nframes)
 
     for (uint32_t currentFrame=0; currentFrame < nframes; ++currentFrame)
     {
-        delayLineClean.write(input[currentFrame] + delayLineClean.read() * feedback);
-        delayLineFX.write(input[currentFrame] + delayLineFX.read() * feedback);
+        delayLineClean.write(input[currentFrame] + delayLineClean.read() * feedbackClean);
+        delayLineFX.write(input[currentFrame] + delayLineFX.read() * feedbackClean);
 
         output[currentFrame] = input[currentFrame] + delayLineClean.read() + delayLineFX.read();
 

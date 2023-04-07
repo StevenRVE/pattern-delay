@@ -25,8 +25,8 @@ class PatternDelay : public Plugin
 public:
     enum Parameters {
         PARAM_GAIN,
-        PARAM_FEEDBACK,
-        PARAM_DELAYTIME,
+        PARAM_FEEDBACK_CLEAN,
+        PARAM_DELAYTIME_CLEAN,
         PARAM_COUNT
     };
 
@@ -133,8 +133,8 @@ private:
 
     // variables
     float gain;
-    float feedback;
-    uint32_t delayTime;
+    float feedbackClean;
+    uint32_t delayTimeClean;
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PatternDelay)
 };

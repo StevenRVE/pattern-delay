@@ -8,7 +8,8 @@ cmake_minimum_required(VERSION 3.7)
 
    FILES_DSP
        source/sve-pattern-delay.cpp
-         source/objects/delayLine.cpp
+       source/objects/delayLine.cpp
+       source/patternGenerator.cpp
  )
 
  target_include_directories(sve-pattern-delay

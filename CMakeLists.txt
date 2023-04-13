@@ -11,8 +11,8 @@ set(CMAKE_CXX_STANDARD 11)
    FILES_DSP
        source/sve-pattern-delay.cpp
        source/objects/delayLine.cpp
-       source/patternGenerator.cpp
-       source/euclideanGenerator.cpp
+         source/pattern/patternGenerator.cpp
+         source/pattern/euclideanGenerator.cpp
  )
 
  target_include_directories(sve-pattern-delay

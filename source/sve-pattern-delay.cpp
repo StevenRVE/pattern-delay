@@ -20,6 +20,7 @@ PatternDelay::PatternDelay()
       Initialize all our parameters to their defaults.
       In this example all parameters have 0 as default, so we can simply zero them.
     */
+    patternGenerator.generateEuclideanSequence(0,0,0);
 }
 
 

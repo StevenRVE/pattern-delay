@@ -10,6 +10,8 @@
 #include <array>
 #include <random>
 
+#include "euclideanGenerator.hpp"
+
 class PatternGenerator {
 public:
     enum PatternType{
@@ -29,15 +31,22 @@ public:
 
     uint32_t generateRandomNumber();
 
+    void generateEuclideanSequence(uint32_t step, uint32_t pulse, uint32_t rota);
+    uint32_t getEuclideanSequenceValue(uint32_t stepIndex);
+
 private:
     PatternType patternType = PATTERN_TYPE_RANDOM;
     uint8_t patternNumber;
 
+    // random
     std::random_device randomDevice;
     std::mt19937 generator;
     std::uniform_int_distribution<> distribution; // distribution in range [0, 99]
 
-    std::array<bool,8> pattern { 0 };
+    // euclidean
+    EuclideanGenerator euclideanGenerator;
+
+    std::array<bool,16> pattern { 0 };
 };
 
 

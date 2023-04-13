@@ -7,7 +7,8 @@
 PatternGenerator::PatternGenerator() :
     patternNumber(0),
     generator(randomDevice()),
-    distribution(0,99)
+    distribution(0,99),
+    euclideanGenerator()
 {
 
 }
@@ -51,5 +52,13 @@ uint32_t PatternGenerator::generateRandomNumber()
     uint32_t randomNum = distribution(generator);
     std::cout << randomNum << std::endl;
     return randomNum;
+}
+
+void PatternGenerator::generateEuclideanSequence(uint32_t step, uint32_t pulse, uint32_t rota) {
+    euclideanGenerator.calcEuclideanSequence(step, pulse, rota);
+}
+
+uint32_t PatternGenerator::getEuclideanSequenceValue(uint32_t index) {
+    return euclideanGenerator.getSequenceValue(index);
 }
 

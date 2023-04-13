@@ -6,7 +6,7 @@
 
 // classes
 #include "objects/delayLine.hpp"
-#include "patternGenerator.hpp"
+#include "pattern/patternGenerator.hpp"
 
 // libs
 #include <cstdint>

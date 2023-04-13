@@ -5,16 +5,31 @@
 #include "patternGenerator.hpp"
 
 PatternGenerator::PatternGenerator() :
-    patternNumber(0)
+    patternNumber(0),
+    generator(randomDevice()),
+    distribution(0,99)
 {
 
 }
 
 PatternGenerator::~PatternGenerator() = default;
 
-void PatternGenerator::generatePattern()
+void PatternGenerator::selectPattern(uint8_t index)
 {
-
+    switch (index)
+    {
+        case PATTERN_TYPE_RANDOM:
+            generateRandomNumber();
+            break;
+        case PATTERN_TYPE_EUCLIDEAN:
+            // generate euclidean
+            break;
+        case PATTERN_TYPE_NTH:
+            // generate nth
+            break;
+        default:
+            break;
+    }
 }
 
 void PatternGenerator::setPattern(uint8_t newPatternNumber)
@@ -22,6 +37,7 @@ void PatternGenerator::setPattern(uint8_t newPatternNumber)
     if(newPatternNumber >= 0 && newPatternNumber < PATTERN_TYPE_COUNT)
     {
         this->patternNumber=newPatternNumber;
+        selectPattern(patternNumber);
     }
 }
 
@@ -29,3 +45,11 @@ uint8_t PatternGenerator::getPatternNumber() const
 {
     return patternNumber;
 }
+
+uint32_t PatternGenerator::generateRandomNumber()
+{
+    uint32_t randomNum = distribution(generator);
+    std::cout << randomNum << std::endl;
+    return randomNum;
+}
+

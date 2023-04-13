@@ -3,9 +3,10 @@
 
 // framework
 #include "DistrhoPlugin.hpp"
-#include "objects/delayLine.hpp"
 
 // classes
+#include "objects/delayLine.hpp"
+#include "patternGenerator.hpp"
 
 // libs
 #include <cstdint>
@@ -132,6 +133,7 @@ protected:
 private:
     DelayLine delayLineClean;
     DelayLine delayLineFX;
+    PatternGenerator patternGenerator;
 
     // variables
     float gain;

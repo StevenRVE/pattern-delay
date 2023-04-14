@@ -7,14 +7,14 @@ START_NAMESPACE_DISTRHO
       You must set all parameter values to their defaults, matching the value in initParameter().
     */
 PatternDelay::PatternDelay()
-: Plugin(PARAM_COUNT, 0, 0),
-  gain(0.0f),
-  feedbackClean(0.5f),
-  delayTimeClean(500),
-  feedbackFX(0.5f),
-  delayTimeFX(500),
-  delayLineClean(getSampleRate(), 2),
-  delayLineFX(getSampleRate(), 2)
+:   Plugin(PARAM_COUNT, 0, 0),
+    gain(0.0f),
+    feedbackClean(0.5f),
+    delayTimeClean(500),
+    feedbackFX(0.5f),
+    delayTimeFX(500),
+    delayLineClean(getSampleRate(), 2),
+    delayLineFX(getSampleRate(), 2)
 {
     /**
       Initialize all our parameters to their defaults.

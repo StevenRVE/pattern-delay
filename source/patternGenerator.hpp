@@ -13,10 +13,8 @@
 
 // classes
 #include "euclideanGenerator.hpp"
-#include "observerPattern/observer.hpp"
-#include "clock.hpp"
 
-class PatternGenerator : public Observer
+class PatternGenerator
 {
 public:
     enum PatternType{
@@ -40,8 +38,6 @@ public:
     uint32_t getEuclideanSequenceValue(uint32_t stepIndex);
 
 private:
-    Clock& clock;
-
     PatternType patternType = PATTERN_TYPE_RANDOM;
     uint8_t patternNumber;
 

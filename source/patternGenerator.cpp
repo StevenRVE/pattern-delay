@@ -4,8 +4,8 @@
 
 #include "patternGenerator.hpp"
 
-PatternGenerator::PatternGenerator() :
-    patternNumber(0),
+PatternGenerator::PatternGenerator()
+:   patternNumber(0),
     generator(randomDevice()),
     distribution(0,99),
     euclideanGenerator()
@@ -61,4 +61,3 @@ void PatternGenerator::generateEuclideanSequence(uint32_t step, uint32_t pulse, 
 uint32_t PatternGenerator::getEuclideanSequenceValue(uint32_t index) {
     return euclideanGenerator.getSequenceValue(index);
 }
-

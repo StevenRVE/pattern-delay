@@ -1,5 +1,5 @@
-#ifndef _H_TEMPLATE_PLUGIN_
-#define _H_TEMPLATE_PLUGIN_
+#ifndef _H_PATTERN_DELAY_PLUGIN_
+#define _H_PATTERN_DELAY_PLUGIN_
 
 // framework
 #include "DistrhoPlugin.hpp"
@@ -145,4 +145,4 @@ private:
 
 END_NAMESPACE_DISTRHO
 
-#endif // _H_TEMPLATE_PLUGIN_
+#endif // _H_PATTERN_DELAY_PLUGIN_

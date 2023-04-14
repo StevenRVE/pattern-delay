@@ -5,14 +5,19 @@
 #ifndef SVE_PATTERN_DELAY_PATTERNGENERATOR_HPP
 #define SVE_PATTERN_DELAY_PATTERNGENERATOR_HPP
 
+// libs
 #include <iostream>
 #include <cstdint>
 #include <array>
 #include <random>
 
+// classes
 #include "euclideanGenerator.hpp"
+#include "observerPattern/observer.hpp"
+#include "clock.hpp"
 
-class PatternGenerator {
+class PatternGenerator : public Observer
+{
 public:
     enum PatternType{
         PATTERN_TYPE_RANDOM,
@@ -35,6 +40,8 @@ public:
     uint32_t getEuclideanSequenceValue(uint32_t stepIndex);
 
 private:
+    Clock& clock;
+
     PatternType patternType = PATTERN_TYPE_RANDOM;
     uint8_t patternNumber;
 

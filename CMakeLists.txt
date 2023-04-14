@@ -13,6 +13,9 @@ set(CMAKE_CXX_STANDARD 11)
        source/delayLine.cpp
        source/patternGenerator.cpp
        source/euclideanGenerator.cpp
+       source/observerPattern/observer.cpp
+       source/observerPattern/subject.cpp
+       source/clock.cpp
  )
 
  target_include_directories(sve-pattern-delay

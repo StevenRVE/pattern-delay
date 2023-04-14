@@ -36,7 +36,7 @@ cmake-build-debug
 .idea
 
 # Carla project
-/carla-test-project.carxp
+/tests/carla-test-project.carxp
 
 # MaxMSP patches
-/maxpat-prototypes/
+/tests/maxpat-prototypes/

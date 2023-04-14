@@ -5,8 +5,8 @@
 #include "DistrhoPlugin.hpp"
 
 // classes
-#include "objects/delayLine.hpp"
-#include "pattern/patternGenerator.hpp"
+#include "delayLine.hpp"
+#include "patternGenerator.hpp"
 
 // libs
 #include <cstdint>

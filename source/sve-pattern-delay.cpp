@@ -165,21 +165,24 @@ void PatternDelay::deactivate()
 }
 
 /**
-  Run/process function for plugins with MIDI input.
+  Run/process function for plugins without MIDI input.
 */
 void PatternDelay::run(const float** inputs, float** outputs, uint32_t nframes)
 {
     const float* const input  = inputs[0];
-    /* */ float* const output = outputs[0];
+    /* */ float* outputClean  = outputs[0];
+    /* */ float* outputFX     = outputs[1];
 
     const float gainCoefficient = DB_CO(gain);
 
     for (uint32_t currentFrame=0; currentFrame < nframes; ++currentFrame)
     {
+        // do all processing in process()
         delayLineClean.write(input[currentFrame] + delayLineClean.read() * feedbackClean);
         delayLineFX.write(input[currentFrame] + delayLineFX.read() * feedbackFX);
 
-        output[currentFrame] = input[currentFrame] + delayLineClean.read() + delayLineFX.read();
+        outputClean[currentFrame] = input[currentFrame] + delayLineClean.read();
+        outputFX[currentFrame] = delayLineFX.read();
 
         delayLineClean.tick();
         delayLineFX.tick();

@@ -4,16 +4,23 @@
 
 #include "patternGenerator.hpp"
 
-PatternGenerator::PatternGenerator()
+PatternGenerator::PatternGenerator(uint32_t delayTime, double sampleRate)
 :   patternNumber(0),
+    sampleRate(sampleRate),
     generator(randomDevice()),
     distribution(0,99),
-    euclideanGenerator()
+    euclideanGenerator(),
+    nthGenerator()
 {
-
+    calcDelayTimeSamples(delayTime);
 }
 
 PatternGenerator::~PatternGenerator() = default;
+
+void PatternGenerator::calcDelayTimeSamples(uint32_t delayTimeMS)
+{
+    this->delayTimeSamples = delayTimeMS * ((uint32_t)sampleRate / 1000);
+}
 
 void PatternGenerator::selectPattern(uint8_t index)
 {
@@ -23,10 +30,10 @@ void PatternGenerator::selectPattern(uint8_t index)
             generateRandomNumber();
             break;
         case PATTERN_TYPE_EUCLIDEAN:
-            // generate euclidean
+            generateEuclideanSequence(step,pulse,rota);
             break;
         case PATTERN_TYPE_NTH:
-            // generate nth
+            generateNthSequence(nth, rota);
             break;
         default:
             break;
@@ -54,10 +61,91 @@ uint32_t PatternGenerator::generateRandomNumber()
     return randomNum;
 }
 
-void PatternGenerator::generateEuclideanSequence(uint32_t step, uint32_t pulse, uint32_t rota) {
-    euclideanGenerator.calcEuclideanSequence(step, pulse, rota);
+void PatternGenerator::setRandomChance(uint32_t randomChance)
+{
+    this->randomChance = randomChance;
 }
+
+void PatternGenerator::generateEuclideanSequence(uint32_t steps, uint32_t pulse, uint32_t rota) {
+    euclideanGenerator.calcEuclideanSequence(steps, pulse, rota);
+}
+
+void PatternGenerator::generateNthSequence(uint32_t steps, uint32_t rota) {
+    nthGenerator.calcEuclideanSequence(steps, 1, rota);
+}
+
 
 uint32_t PatternGenerator::getEuclideanSequenceValue(uint32_t index) {
     return euclideanGenerator.getSequenceValue(index);
+}
+
+void PatternGenerator::tick()
+{
+    tickCurrentSample();
+}
+
+void PatternGenerator::tickCurrentStep()
+{
+    this->currentStep += currentStep;
+    wrapCurrentStep();
+}
+
+void PatternGenerator::wrapCurrentStep()
+{
+    if (patternLength > 0 && currentStep >= patternLength)
+    {
+        currentStep -= patternLength;
+    }
+}
+
+void PatternGenerator::tickCurrentSample()
+{
+    this->currentSample += currentSample;
+    wrapCurrentSample();
+}
+
+void PatternGenerator::wrapCurrentSample()
+{
+    if (currentSample >= delayTimeSamples)
+    {
+        currentSample -= delayTimeSamples;
+        tickCurrentStep();
+    }
+}
+
+bool PatternGenerator::getCurrentValue()
+{
+    return currentValue;
+}
+
+void PatternGenerator::setCurrentValue()
+{
+    switch (patternNumber)
+    {
+        case PATTERN_TYPE_RANDOM:
+            if (generateRandomNumber() < randomChance)
+            {
+                this->currentValue = 1;
+                std::cout << "Random Number is higher than: " << randomChance << std::endl;
+            } else {
+                this->currentValue = 0;
+                std::cout << "Random Number is lower than: " << randomChance << std::endl;
+            }
+            break;
+        case PATTERN_TYPE_EUCLIDEAN:
+            this->currentValue = euclideanGenerator.getSequenceValue(currentStep);
+            std::cout << "Euclidean Sequencer value: " << euclideanGenerator.getSequenceValue(currentStep) << std::endl;
+            break;
+        case PATTERN_TYPE_NTH:
+            this->currentValue = nthGenerator.getSequenceValue(currentStep);
+            std::cout << "Euclidean Sequencer value: " << nthGenerator.getSequenceValue(currentStep) << std::endl;
+            break;
+        default:
+            break;
+    }
+}
+
+void PatternGenerator::setPatternLength(uint32_t newPatternLength)
+{
+    this->patternLength = newPatternLength;
 }

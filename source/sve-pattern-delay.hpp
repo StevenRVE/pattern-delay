@@ -30,6 +30,13 @@ public:
         PARAM_DELAYTIME_CLEAN,
         PARAM_FEEDBACK_FX,
         PARAM_DELAYTIME_FX,
+        PARAM_PATTERN_TYPE,
+        PARAM_RANDOM_CHANCE,
+        PARAM_EUC_STEPS,
+        PARAM_EUC_PULSE,
+        PARAM_EUC_ROTATION,
+        PARAM_NTH,
+        PARAM_NTH_ROTATION,
         PARAM_COUNT
     };
 
@@ -119,7 +126,7 @@ protected:
     /**
       Run/process function for plugins with MIDI input.
     */
-    void run(const float**, float**, uint32_t nframes) override;
+    void run(const float** inputs, float** outputs, uint32_t nframes) override;
 
     // -------------------------------------------------------------------
     // callbacks
@@ -131,14 +138,21 @@ protected:
     void sampleRateChanged(double newSampleRate) override;
 
 private:
-    DelayLine delayLineClean;
-    DelayLine delayLineFX;
-    PatternGenerator patternGenerator;
+
 
     // variables
-    float gain;
-    float feedbackClean, feedbackFX;
-    uint32_t delayTimeClean, delayTimeFX;
+    float gain{0.0f};
+    float feedbackClean{0.5f}, feedbackFX{0.5f};
+    uint32_t delayTimeClean{500}, delayTimeFX{500};
+    uint32_t patternType{0};
+    uint32_t randomChance{50};
+    uint32_t eucSteps{0}, eucPulse{0}, eucRota{0};
+    uint32_t nth{0}, nthRota{0};
+
+    // objects
+    DelayLine delayLineClean;
+    DelayLine delayLineFX;
+    PatternGenerator pattern;
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PatternDelay)
 };

@@ -24,32 +24,58 @@ public:
         PATTERN_TYPE_COUNT
     };
 
-    PatternGenerator();
+    PatternGenerator(uint32_t delayTime, double sampleRate);
 
     ~PatternGenerator();
+
+    void calcDelayTimeSamples(uint32_t delayTimeMS);
 
     void selectPattern(uint8_t index);
     void setPattern(uint8_t newPatternNumber);
     uint8_t getPatternNumber() const;
 
     uint32_t generateRandomNumber();
+    void setRandomChance(uint32_t randomChance);
 
     void generateEuclideanSequence(uint32_t step, uint32_t pulse, uint32_t rota);
+    void generateNthSequence(uint32_t step, uint32_t rota);
     uint32_t getEuclideanSequenceValue(uint32_t stepIndex);
 
+    void tick();
+    void tickCurrentStep();
+    void wrapCurrentStep();
+    void tickCurrentSample();
+    void wrapCurrentSample();
+
+    bool getCurrentValue();
+    void setCurrentValue();
+
+    void setPatternLength(uint32_t patternLength); // should check which pattern is in use and update pattern accordingly
+
 private:
+    // pattern
     PatternType patternType = PATTERN_TYPE_RANDOM;
-    uint8_t patternNumber;
+    uint8_t patternNumber{0};
+    uint32_t patternLength{0};
+    uint32_t currentStep{0};
+    bool currentValue{0};
+    uint32_t currentSample{0};
+    uint32_t delayTimeSamples{0};
+    double sampleRate;
 
     // random
     std::random_device randomDevice;
     std::mt19937 generator;
     std::uniform_int_distribution<> distribution; // distribution in range [0, 99]
+    uint32_t randomChance;
 
     // euclidean
     EuclideanGenerator euclideanGenerator;
+    uint32_t step, pulse, rota;
 
-    std::array<bool,16> pattern { 0 };
+    // nth
+    uint32_t nth;
+    EuclideanGenerator nthGenerator;
 };
 
 

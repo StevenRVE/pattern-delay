@@ -8,19 +8,15 @@ START_NAMESPACE_DISTRHO
     */
 PatternDelay::PatternDelay()
 :   Plugin(PARAM_COUNT, 0, 0),
-    gain(0.0f),
-    feedbackClean(0.5f),
-    delayTimeClean(500),
-    feedbackFX(0.5f),
-    delayTimeFX(500),
     delayLineClean(getSampleRate(), 2),
-    delayLineFX(getSampleRate(), 2)
+    delayLineFX(getSampleRate(), 2),
+    pattern(delayTimeFX, getSampleRate())
 {
     /**
       Initialize all our parameters to their defaults.
       In this example all parameters have 0 as default, so we can simply zero them.
     */
-    patternGenerator.generateEuclideanSequence(0,0,0);
+    pattern.generateEuclideanSequence(0,0,0);
 }
 
 
@@ -58,12 +54,24 @@ void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
         param.name = props.name;
         param.symbol = props.symbol;
     };
+    
+    const auto createPatternList = []
+    {
+        ParameterEnumerationValue* const patternList = new ParameterEnumerationValue[3];
+        patternList[0].label = "Random";
+        patternList[0].value = 0;
+        patternList[1].label = "Euclidean";
+        patternList[1].value = 1;
+        patternList[2].label = "Nth";
+        patternList[2].value = 2;
+        return patternList;
+    };
 
     switch (index)
     {
         // MASTER PARAMS
         case PARAM_GAIN:
-            setParamProps(parameter, { .automatable=true, .min=-90.0f, .max=24.0f, .def=0.0f, .name="Gain", .symbol="gain"});
+            setParamProps(parameter, { .automatable=true, .min=-90.0f, .max=24.0f, .def=0.1f, .name="Gain", .symbol="gain"});
             break;
         case PARAM_FEEDBACK_CLEAN:
             setParamProps(parameter, { .automatable=true, .min=0.0f, .max=0.9f, .def=0.5f, .name="Feedback Clean", .symbol="feedbackClean"});
@@ -73,11 +81,36 @@ void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
             delayLineClean.setDistanceReadWriteHead(delayTimeClean);
             break;
         case PARAM_FEEDBACK_FX:
-            setParamProps(parameter, { .automatable=true, .min=0.0f, .max=0.9f, .def=0.5f, .name="Feedback", .symbol="feedback FX"});
+            setParamProps(parameter, { .automatable=true, .min=0.0f, .max=0.9f, .def=0.5f, .name="Feedback", .symbol="feedbackFX"});
             break;
         case PARAM_DELAYTIME_FX:
             setParamProps(parameter, { .automatable=true, .integer=true, .min=100, .max=2000, .def=500, .name="Delay Time FX", .symbol="delayTimeFX"});
             delayLineFX.setDistanceReadWriteHead(delayTimeFX);
+            break;
+        case PARAM_PATTERN_TYPE:
+            setParamProps(parameter, { .automatable=true, .integer=true, .min=0, .max=2, .def=0, .name="Pattern Type", .symbol="patternType"});
+            parameter.enumValues.count = 3;
+            parameter.enumValues.restrictedMode = true;
+            parameter.enumValues.values = createPatternList();
+            break;
+        case PARAM_RANDOM_CHANCE:
+            setParamProps(parameter, { .automatable=true, .integer=true, .min=0, .max=100, .def=50, .name="Random Chance", .symbol="randomChance"});
+            pattern.setRandomChance(50);
+            break;
+        case PARAM_EUC_STEPS:
+            setParamProps(parameter, { .automatable=true, .integer=true, .min=0, .max=16, .def=0, .name="Euclidean Steps", .symbol="eucSteps"});
+            break;
+        case PARAM_EUC_PULSE:
+            setParamProps(parameter, { .automatable=true, .integer=true, .min=0, .max=16, .def=0, .name="Euclidean Pulse", .symbol="eucPulse"});
+            break;
+        case PARAM_EUC_ROTATION:
+            setParamProps(parameter, { .automatable=true, .integer=true, .min=0, .max=15, .def=0, .name="Euclidean Rotation", .symbol="eucRotation"});
+            break;
+        case PARAM_NTH:
+            setParamProps(parameter, { .automatable=true, .integer=true, .min=0, .max=16, .def=0, .name="N-th", .symbol="nth"});
+            break;
+        case PARAM_NTH_ROTATION:
+            setParamProps(parameter, { .automatable=true, .integer=true, .min=0, .max=15, .def=0, .name="N-th Rotation", .symbol="nthRotation"});
             break;
         default:
             break;
@@ -96,7 +129,7 @@ float PatternDelay::getParameterValue(uint32_t index) const
 {
     switch (index)
     {
-        // PARAMS
+        // Plugin
         case PARAM_GAIN:
             return gain;
         // Delay Clean
@@ -109,6 +142,21 @@ float PatternDelay::getParameterValue(uint32_t index) const
             return feedbackFX;
         case PARAM_DELAYTIME_FX:
             return delayTimeFX;
+        // Pattern
+        case PARAM_PATTERN_TYPE:
+            return patternType;
+        case PARAM_RANDOM_CHANCE:
+            return randomChance;
+        case PARAM_EUC_STEPS:
+            return eucSteps;
+        case PARAM_EUC_PULSE:
+            return eucPulse;
+        case PARAM_EUC_ROTATION:
+            return eucRota;
+        case PARAM_NTH:
+            return nth;
+        case PARAM_NTH_ROTATION:
+            return nthRota;
         default:
             return 0;
     }
@@ -126,21 +174,46 @@ void PatternDelay::setParameterValue(uint32_t index, float value)
     {
     // MASTER PARAMS
     case PARAM_GAIN:
-        gain = value;
+        this->gain = value;
         break;
     case PARAM_FEEDBACK_CLEAN:
-        feedbackClean = value;
+        this->feedbackClean = value;
         break;
     case PARAM_DELAYTIME_CLEAN:
-        delayTimeClean = value;
+        this->delayTimeClean = value;
         delayLineClean.setDistanceReadWriteHead(delayTimeClean);
         break;
     case PARAM_FEEDBACK_FX:
-        feedbackFX = value;
+        this->feedbackFX = value;
         break;
     case PARAM_DELAYTIME_FX:
-        delayTimeFX = value;
+        this->delayTimeFX = value;
         delayLineFX.setDistanceReadWriteHead(delayTimeFX);
+        pattern.calcDelayTimeSamples(delayTimeFX);
+        break;
+    case PARAM_RANDOM_CHANCE:
+        this->randomChance = value;
+        pattern.setRandomChance(value);
+        break;
+    case PARAM_EUC_STEPS:
+        this->eucSteps = value;
+        pattern.generateEuclideanSequence(value, eucPulse, eucRota);
+        break;
+    case PARAM_EUC_PULSE:
+        this->eucPulse = value;
+            pattern.generateEuclideanSequence(eucSteps, value, eucRota);
+        break;
+    case PARAM_EUC_ROTATION:
+        this->eucRota = value;
+        pattern.generateEuclideanSequence(eucSteps, eucPulse, value);
+        break;
+    case PARAM_NTH:
+        this->nth = value;
+        pattern.generateNthSequence(value, nthRota);
+        break;
+    case PARAM_NTH_ROTATION:
+        this->nthRota = value;
+        pattern.generateNthSequence(nth, value);
         break;
     default:
         break;
@@ -174,18 +247,24 @@ void PatternDelay::run(const float** inputs, float** outputs, uint32_t nframes)
     /* */ float* outputFX     = outputs[1];
 
     const float gainCoefficient = DB_CO(gain);
+    std::cout << gain << std::endl;
 
     for (uint32_t currentFrame=0; currentFrame < nframes; ++currentFrame)
     {
-        // do all processing in process()
-        delayLineClean.write(input[currentFrame] + delayLineClean.read() * feedbackClean);
-        delayLineFX.write(input[currentFrame] + delayLineFX.read() * feedbackFX);
+        if (pattern.getCurrentValue())
+        {
+            delayLineFX.write(input[currentFrame] + delayLineFX.read() * feedbackFX);
+        }
+        else {
+            delayLineClean.write(input[currentFrame] + delayLineClean.read() * feedbackClean);
+        }
 
         outputClean[currentFrame] = input[currentFrame] + delayLineClean.read();
         outputFX[currentFrame] = delayLineFX.read();
 
         delayLineClean.tick();
         delayLineFX.tick();
+        pattern.tick();
     }
 }
 

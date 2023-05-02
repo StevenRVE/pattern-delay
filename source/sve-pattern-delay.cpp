@@ -70,9 +70,6 @@ void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
     switch (index)
     {
         // MASTER PARAMS
-        case PARAM_GAIN:
-            setParamProps(parameter, { .automatable=true, .min=-90.0f, .max=24.0f, .def=0.1f, .name="Gain", .symbol="gain"});
-            break;
         case PARAM_FEEDBACK_CLEAN:
             setParamProps(parameter, { .automatable=true, .min=0.0f, .max=0.9f, .def=0.5f, .name="Feedback Clean", .symbol="feedbackClean"});
             break;
@@ -129,9 +126,6 @@ float PatternDelay::getParameterValue(uint32_t index) const
 {
     switch (index)
     {
-        // Plugin
-        case PARAM_GAIN:
-            return gain;
         // Delay Clean
         case PARAM_FEEDBACK_CLEAN:
             return feedbackClean;
@@ -173,9 +167,6 @@ void PatternDelay::setParameterValue(uint32_t index, float value)
     switch (index)
     {
     // MASTER PARAMS
-    case PARAM_GAIN:
-        this->gain = value;
-        break;
     case PARAM_FEEDBACK_CLEAN:
         this->feedbackClean = value;
         break;
@@ -245,9 +236,6 @@ void PatternDelay::run(const float** inputs, float** outputs, uint32_t nframes)
     const float* const input  = inputs[0];
     /* */ float* outputClean  = outputs[0];
     /* */ float* outputFX     = outputs[1];
-
-    const float gainCoefficient = DB_CO(gain);
-    std::cout << gain << std::endl;
 
     for (uint32_t currentFrame=0; currentFrame < nframes; ++currentFrame)
     {

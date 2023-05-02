@@ -12,10 +12,6 @@
 #include <cstdint>
 #include <iostream>
 
-// constants
-// Define a macro for converting a gain in dB to a coefficient.
-#define DB_CO(g) ((g) > -90.0f ? powf(10.0f, (g) * 0.05f) : 0.0f)
-
 START_NAMESPACE_DISTRHO
 
 /**
@@ -25,7 +21,6 @@ class PatternDelay : public Plugin
 {
 public:
     enum Parameters {
-        PARAM_GAIN,
         PARAM_FEEDBACK_CLEAN,
         PARAM_DELAYTIME_CLEAN,
         PARAM_FEEDBACK_FX,
@@ -138,10 +133,7 @@ protected:
     void sampleRateChanged(double newSampleRate) override;
 
 private:
-
-
     // variables
-    float gain{0.0f};
     float feedbackClean{0.5f}, feedbackFX{0.5f};
     uint32_t delayTimeClean{500}, delayTimeFX{500};
     uint32_t patternType{0};

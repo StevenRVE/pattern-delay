@@ -86,8 +86,9 @@ void PatternGenerator::tick()
 
 void PatternGenerator::tickCurrentStep()
 {
-    this->currentStep += currentStep;
+    currentStep++;
     wrapCurrentStep();
+    setCurrentValue();
 }
 
 void PatternGenerator::wrapCurrentStep()
@@ -100,7 +101,7 @@ void PatternGenerator::wrapCurrentStep()
 
 void PatternGenerator::tickCurrentSample()
 {
-    this->currentSample += currentSample;
+    currentSample++;
     wrapCurrentSample();
 }
 
@@ -126,19 +127,15 @@ void PatternGenerator::setCurrentValue()
             if (generateRandomNumber() < randomChance)
             {
                 this->currentValue = 1;
-                std::cout << "Random Number is higher than: " << randomChance << std::endl;
             } else {
                 this->currentValue = 0;
-                std::cout << "Random Number is lower than: " << randomChance << std::endl;
             }
             break;
         case PATTERN_TYPE_EUCLIDEAN:
             this->currentValue = euclideanGenerator.getSequenceValue(currentStep);
-            std::cout << "Euclidean Sequencer value: " << euclideanGenerator.getSequenceValue(currentStep) << std::endl;
             break;
         case PATTERN_TYPE_NTH:
             this->currentValue = nthGenerator.getSequenceValue(currentStep);
-            std::cout << "Euclidean Sequencer value: " << nthGenerator.getSequenceValue(currentStep) << std::endl;
             break;
         default:
             break;

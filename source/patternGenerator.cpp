@@ -115,6 +115,7 @@ void PatternGenerator::setCurrentValue()
     switch (patternNumber)
     {
         case PATTERN_TYPE_RANDOM:
+            std::cout << "CurrentStep: " << currentStep << " Setting current value to " << currentValue << " using pattern number the random algorithm\n";
             if (generateRandomNumber() < randomChance)
             {
                 this->currentValue = 1;
@@ -123,9 +124,11 @@ void PatternGenerator::setCurrentValue()
             }
             break;
         case PATTERN_TYPE_EUCLIDEAN:
+            std::cout << "CurrentStep: " << currentStep << " Setting current value to " << currentValue << " using pattern number using the euclidean algorithm\n";
             this->currentValue = euclideanGenerator.getSequenceValue(currentStep);
             break;
         case PATTERN_TYPE_NTH:
+            std::cout << "CurrentStep: " << currentStep << " Setting current value to " << currentValue << " using pattern number using the nth algorithm\n";
             this->currentValue = nthGenerator.getSequenceValue(currentStep);
             break;
         default:

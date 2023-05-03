@@ -45,6 +45,7 @@ void PatternGenerator::setPattern(uint8_t newPatternNumber)
     if(newPatternNumber >= 0 && newPatternNumber < PATTERN_TYPE_COUNT)
     {
         this->patternNumber=newPatternNumber;
+        currentStep = 0;
         selectPattern(patternNumber);
     }
 }

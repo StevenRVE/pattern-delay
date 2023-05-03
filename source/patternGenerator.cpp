@@ -94,9 +94,11 @@ void PatternGenerator::tickCurrentStep()
 
 void PatternGenerator::wrapCurrentStep()
 {
-    if (patternLength > 0 && currentStep >= patternLength)
+    std::cout << "patternLength: " << patternLength << "\n";
+    if (patternLength >= 0 && currentStep >= patternLength)
     {
-        currentStep -= patternLength;
+        std::cout << "Wrapping currentStep\n";
+        currentStep = 0;
     }
 }
 

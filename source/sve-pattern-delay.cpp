@@ -193,11 +193,12 @@ void PatternDelay::setParameterValue(uint32_t index, float value)
         break;
     case PARAM_EUC_STEPS:
         this->eucSteps = value;
+        pattern.setPatternLength(value);
         pattern.generateEuclideanSequence(value, eucPulse, eucRota);
         break;
     case PARAM_EUC_PULSE:
         this->eucPulse = value;
-            pattern.generateEuclideanSequence(eucSteps, value, eucRota);
+        pattern.generateEuclideanSequence(eucSteps, value, eucRota);
         break;
     case PARAM_EUC_ROTATION:
         this->eucRota = value;
@@ -205,6 +206,7 @@ void PatternDelay::setParameterValue(uint32_t index, float value)
         break;
     case PARAM_NTH:
         this->nth = value;
+        pattern.setPatternLength(value);
         pattern.generateNthSequence(value, nthRota);
         break;
     case PARAM_NTH_ROTATION:

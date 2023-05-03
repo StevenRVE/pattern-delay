@@ -76,10 +76,7 @@ void EuclideanGenerator::setRotation (uint32_t value)
 */
 void EuclideanGenerator::calcEuclideanSequence(uint32_t steps, uint32_t pulses, uint32_t rotation)
 {
-    if (steps < pulses) {
-        std::cout << "Error: steps < pulses" << std::endl;
-        return;
-    }
+    if (steps == 0 || pulses == 0 || steps < pulses) { return; }
 
     uint32_t prevItem = 0;
 
@@ -106,6 +103,6 @@ void EuclideanGenerator::calcEuclideanSequence(uint32_t steps, uint32_t pulses, 
     }
     oss << "]";
 
-    std::cout << oss.str() << std::endl;
+    std::cout << oss.str() << "\n";
 }
 

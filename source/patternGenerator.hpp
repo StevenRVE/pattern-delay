@@ -32,14 +32,12 @@ public:
 
     void selectPattern(uint8_t index);
     void setPattern(uint8_t newPatternNumber);
-    uint8_t getPatternNumber() const;
 
     uint32_t generateRandomNumber();
     void setRandomChance(uint32_t randomChance);
 
     void generateEuclideanSequence(uint32_t step, uint32_t pulse, uint32_t rota);
     void generateNthSequence(uint32_t step, uint32_t rota);
-    uint32_t getEuclideanSequenceValue(uint32_t stepIndex);
 
     void tick();
     void tickCurrentStep();
@@ -50,11 +48,12 @@ public:
     bool getCurrentValue();
     void setCurrentValue();
 
-    void setPatternLength(uint32_t patternLength); // should check which pattern is in use and update pattern accordingly
+    void setPatternLength(uint32_t value);
+    void setEuclideanPatternLength(uint32_t value);
+    void setNthPatternLength(uint32_t value);
 
 private:
     // pattern
-    PatternType patternType = PATTERN_TYPE_RANDOM;
     uint8_t patternNumber{0};
     uint32_t patternLength{1};
     uint32_t currentStep{0};
@@ -71,7 +70,7 @@ private:
 
     // euclidean
     EuclideanGenerator euclideanGenerator;
-    uint32_t step, pulse, rota;
+    uint32_t step;
 
     // nth
     uint32_t nth;

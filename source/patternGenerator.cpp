@@ -50,11 +50,6 @@ void PatternGenerator::setPattern(uint8_t newPatternNumber)
     }
 }
 
-uint8_t PatternGenerator::getPatternNumber() const
-{
-    return patternNumber;
-}
-
 uint32_t PatternGenerator::generateRandomNumber()
 {
     uint32_t randomNum = distribution(generator);
@@ -73,11 +68,6 @@ void PatternGenerator::generateEuclideanSequence(uint32_t steps, uint32_t pulse,
 
 void PatternGenerator::generateNthSequence(uint32_t steps, uint32_t rota) {
     nthGenerator.calcEuclideanSequence(steps, 1, rota);
-}
-
-
-uint32_t PatternGenerator::getEuclideanSequenceValue(uint32_t index) {
-    return euclideanGenerator.getSequenceValue(index);
 }
 
 void PatternGenerator::tick()
@@ -145,7 +135,17 @@ void PatternGenerator::setCurrentValue()
     }
 }
 
-void PatternGenerator::setPatternLength(uint32_t newPatternLength)
+void PatternGenerator::setPatternLength(uint32_t value)
 {
-    this->patternLength = newPatternLength;
+    this->patternLength = value;
+}
+
+void PatternGenerator::setEuclideanPatternLength(uint32_t value)
+{
+    this->step = value;
+}
+
+void PatternGenerator::setNthPatternLength(uint32_t value)
+{
+    this->nth = value;
 }

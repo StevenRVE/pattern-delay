@@ -10,7 +10,7 @@ PatternDelay::PatternDelay()
 :   Plugin(PARAM_COUNT, 0, 0),
     delayLineClean(getSampleRate(), 2),
     delayLineFX(getSampleRate(), 2),
-    pattern(delayTimeFX, getSampleRate())
+    pattern(delayTime, getSampleRate())
 {
     /**
       Initialize all our parameters to their defaults.
@@ -70,19 +70,13 @@ void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
     switch (index)
     {
         // MASTER PARAMS
-        case PARAM_FEEDBACK_CLEAN:
-            setParamProps(parameter, { .automatable=true, .min=0.0f, .max=0.9f, .def=0.5f, .name="Feedback Clean", .symbol="feedbackClean"});
+        case PARAM_FEEDBACK:
+            setParamProps(parameter, { .automatable=true, .min=0.0f, .max=0.9f, .def=0.5f, .name="Feedback", .symbol="feedback"});
             break;
-        case PARAM_DELAYTIME_CLEAN:
-            setParamProps(parameter, { .automatable=true, .integer=true, .min=100, .max=2000, .def=500, .name="Delay Time Clean", .symbol="delayTimeClean"});
-            delayLineClean.setDistanceReadWriteHead(delayTimeClean);
-            break;
-        case PARAM_FEEDBACK_FX:
-            setParamProps(parameter, { .automatable=true, .min=0.0f, .max=0.9f, .def=0.5f, .name="Feedback", .symbol="feedbackFX"});
-            break;
-        case PARAM_DELAYTIME_FX:
-            setParamProps(parameter, { .automatable=true, .integer=true, .min=100, .max=2000, .def=500, .name="Delay Time FX", .symbol="delayTimeFX"});
-            delayLineFX.setDistanceReadWriteHead(delayTimeFX);
+        case PARAM_DELAYTIME:
+            setParamProps(parameter, { .automatable=true, .integer=true, .min=100, .max=2000, .def=500, .name="Delay Time", .symbol="delayTime"});
+            delayLineClean.setDistanceReadWriteHead(delayTime);
+            delayLineFX.setDistanceReadWriteHead(delayTime);
             break;
         case PARAM_PATTERN_TYPE:
             setParamProps(parameter, { .automatable=true, .integer=true, .min=0, .max=2, .def=0, .name="Pattern Type", .symbol="patternType"});
@@ -127,15 +121,10 @@ float PatternDelay::getParameterValue(uint32_t index) const
     switch (index)
     {
         // Delay Clean
-        case PARAM_FEEDBACK_CLEAN:
-            return feedbackClean;
-        case PARAM_DELAYTIME_CLEAN:
-            return delayTimeClean;
-        // Delay FX
-        case PARAM_FEEDBACK_FX:
-            return feedbackFX;
-        case PARAM_DELAYTIME_FX:
-            return delayTimeFX;
+        case PARAM_FEEDBACK:
+            return feedback;
+        case PARAM_DELAYTIME:
+            return delayTime;
         // Pattern
         case PARAM_PATTERN_TYPE:
             return patternType;
@@ -167,20 +156,14 @@ void PatternDelay::setParameterValue(uint32_t index, float value)
     switch (index)
     {
     // MASTER PARAMS
-    case PARAM_FEEDBACK_CLEAN:
-        this->feedbackClean = value;
+    case PARAM_FEEDBACK:
+        this->feedback = value;
         break;
-    case PARAM_DELAYTIME_CLEAN:
-        this->delayTimeClean = value;
-        delayLineClean.setDistanceReadWriteHead(delayTimeClean);
-        break;
-    case PARAM_FEEDBACK_FX:
-        this->feedbackFX = value;
-        break;
-    case PARAM_DELAYTIME_FX:
-        this->delayTimeFX = value;
-        delayLineFX.setDistanceReadWriteHead(delayTimeFX);
-        pattern.calcDelayTimeSamples(delayTimeFX);
+    case PARAM_DELAYTIME:
+        this->delayTime = value;
+        delayLineClean.setDistanceReadWriteHead(delayTime);
+        delayLineFX.setDistanceReadWriteHead(delayTime);
+        pattern.calcDelayTimeSamples(delayTime);
         break;
     case PARAM_PATTERN_TYPE:
         this->patternType = value;
@@ -246,16 +229,24 @@ void PatternDelay::run(const float** inputs, float** outputs, uint32_t nframes)
 
     for (uint32_t currentFrame=0; currentFrame < nframes; ++currentFrame)
     {
-        if (pattern.getCurrentValue())
+        if (!pattern.getCurrentValue())
         {
-            delayLineFX.write(input[currentFrame] + delayLineFX.read() * feedbackFX);
+            delayLineClean.write(input[currentFrame] + delayLineClean.read() * feedback);
         }
         else {
-            delayLineClean.write(input[currentFrame] + delayLineClean.read() * feedbackClean);
+            delayLineClean.write(delayLineClean.read() * feedback);
+        }
+
+        if (pattern.getCurrentValue())
+        {
+            delayLineFX.write(input[currentFrame] + delayLineFX.read() * feedback);
+        }
+        else {
+            delayLineFX.write( delayLineFX.read() * feedback);
         }
 
         outputClean[currentFrame] = input[currentFrame] + delayLineClean.read();
-        outputFX[currentFrame] = delayLineFX.read();
+        outputFX[currentFrame] = input[currentFrame] + delayLineFX.read();
 
         delayLineClean.tick();
         delayLineFX.tick();

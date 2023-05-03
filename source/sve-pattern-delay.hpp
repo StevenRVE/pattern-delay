@@ -21,10 +21,8 @@ class PatternDelay : public Plugin
 {
 public:
     enum Parameters {
-        PARAM_FEEDBACK_CLEAN,
-        PARAM_DELAYTIME_CLEAN,
-        PARAM_FEEDBACK_FX,
-        PARAM_DELAYTIME_FX,
+        PARAM_FEEDBACK,
+        PARAM_DELAYTIME,
         PARAM_PATTERN_TYPE,
         PARAM_RANDOM_CHANCE,
         PARAM_EUC_STEPS,
@@ -134,8 +132,8 @@ protected:
 
 private:
     // variables
-    float feedbackClean{0.5f}, feedbackFX{0.5f};
-    uint32_t delayTimeClean{500}, delayTimeFX{500};
+    float feedback{0.5f};
+    uint32_t delayTime{500};
     uint32_t patternType{0};
     uint32_t randomChance{50};
     uint32_t eucSteps{0}, eucPulse{0}, eucRota{0};

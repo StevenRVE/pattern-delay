@@ -27,13 +27,13 @@ void PatternGenerator::selectPattern(uint8_t index)
     switch (index)
     {
         case PATTERN_TYPE_RANDOM:
-            generateRandomNumber();
+            setPatternLength(1);
             break;
         case PATTERN_TYPE_EUCLIDEAN:
-            generateEuclideanSequence(step,pulse,rota);
+            setPatternLength(pulse);
             break;
         case PATTERN_TYPE_NTH:
-            generateNthSequence(nth, rota);
+            setPatternLength(nth);
             break;
         default:
             break;

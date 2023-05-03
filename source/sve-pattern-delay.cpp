@@ -182,6 +182,11 @@ void PatternDelay::setParameterValue(uint32_t index, float value)
         delayLineFX.setDistanceReadWriteHead(delayTimeFX);
         pattern.calcDelayTimeSamples(delayTimeFX);
         break;
+    case PARAM_PATTERN_TYPE:
+        this->patternType = value;
+        std::cout << "setting patterType to: " << value << "\n";
+        pattern.setPattern(value);
+        break;
     case PARAM_RANDOM_CHANCE:
         this->randomChance = value;
         pattern.setRandomChance(value);

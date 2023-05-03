@@ -56,7 +56,7 @@ private:
     // pattern
     PatternType patternType = PATTERN_TYPE_RANDOM;
     uint8_t patternNumber{0};
-    uint32_t patternLength{0};
+    uint32_t patternLength{1};
     uint32_t currentStep{0};
     bool currentValue{0};
     uint32_t currentSample{0};

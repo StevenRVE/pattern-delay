@@ -30,7 +30,7 @@ void PatternGenerator::selectPattern(uint8_t index)
             setPatternLength(1);
             break;
         case PATTERN_TYPE_EUCLIDEAN:
-            setPatternLength(pulse);
+            setPatternLength(step);
             break;
         case PATTERN_TYPE_NTH:
             setPatternLength(nth);
@@ -53,7 +53,6 @@ void PatternGenerator::setPattern(uint8_t newPatternNumber)
 uint32_t PatternGenerator::generateRandomNumber()
 {
     uint32_t randomNum = distribution(generator);
-    std::cout << randomNum << std::endl;
     return randomNum;
 }
 
@@ -87,7 +86,6 @@ void PatternGenerator::wrapCurrentStep()
     std::cout << "patternLength: " << patternLength << "\n";
     if (patternLength >= 0 && currentStep >= patternLength)
     {
-        std::cout << "Wrapping currentStep\n";
         currentStep = 0;
     }
 }

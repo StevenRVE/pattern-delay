@@ -90,6 +90,7 @@ void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
             break;
         case PARAM_EUC_STEPS:
             setParamProps(parameter, { .automatable=true, .integer=true, .min=0, .max=16, .def=0, .name="Euclidean Steps", .symbol="eucSteps"});
+            pattern.setEuclideanPatternLength(0);
             break;
         case PARAM_EUC_PULSE:
             setParamProps(parameter, { .automatable=true, .integer=true, .min=0, .max=16, .def=0, .name="Euclidean Pulse", .symbol="eucPulse"});
@@ -99,6 +100,7 @@ void PatternDelay::initParameter(uint32_t index, Parameter& parameter)
             break;
         case PARAM_NTH:
             setParamProps(parameter, { .automatable=true, .integer=true, .min=0, .max=16, .def=0, .name="N-th", .symbol="nth"});
+            pattern.setNthPatternLength(0);
             break;
         case PARAM_NTH_ROTATION:
             setParamProps(parameter, { .automatable=true, .integer=true, .min=0, .max=15, .def=0, .name="N-th Rotation", .symbol="nthRotation"});
@@ -176,7 +178,8 @@ void PatternDelay::setParameterValue(uint32_t index, float value)
         break;
     case PARAM_EUC_STEPS:
         this->eucSteps = value;
-        pattern.setPatternLength(value);
+        if(patternType==1){ pattern.setPatternLength(value); }
+        pattern.setEuclideanPatternLength(value);
         pattern.generateEuclideanSequence(value, eucPulse, eucRota);
         break;
     case PARAM_EUC_PULSE:
@@ -189,7 +192,8 @@ void PatternDelay::setParameterValue(uint32_t index, float value)
         break;
     case PARAM_NTH:
         this->nth = value;
-        pattern.setPatternLength(value);
+        if(patternType==2){ pattern.setPatternLength(value); }
+        pattern.setNthPatternLength(value);
         pattern.generateNthSequence(value, nthRota);
         break;
     case PARAM_NTH_ROTATION:

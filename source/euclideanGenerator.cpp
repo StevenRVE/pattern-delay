@@ -18,7 +18,7 @@ EuclideanGenerator::~EuclideanGenerator() = default;
 
 uint32_t EuclideanGenerator::getSequenceValue(uint32_t index) const
 {
-    if (index > MAX_STEPS) return 0;
+    if (index >= MAX_STEPS) return 0;
 
     return sequence[index];
 }
